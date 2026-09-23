@@ -79,7 +79,6 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        const BOT_TOKEN = "8630869952:AAEabrUH3WfEw_coJA_x5sXCmtSwKjTvZiI";
         const AdController = window.Adsgram.init({ blockId: "49354" });
 
         function calculateReward() {
@@ -94,20 +93,8 @@
             } else if (adCount === 3) {
                 return 0.40;
             } else {
-                // 0.08 theke 0.15 er moddhe random reward
                 const randomVal = Math.random() * (0.15 - 0.08) + 0.08;
                 return parseFloat(randomVal.toFixed(2));
-            }
-        }
-
-        async function notifyTelegramBot(userId, reward) {
-            const text = `🎉 <b>Congratulations!</b>\n\nঅ্যাড দেখার জন্য আপনার ব্যালেন্সে <b>৳${reward.toFixed(2)}</b> রিওয়ার্ড যুক্ত হয়েছে!`;
-            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${userId}&text=${encodeURIComponent(text)}&parse_mode=HTML`;
-            
-            try {
-                await fetch(url);
-            } catch (err) {
-                console.error("Bot notify error:", err);
             }
         }
 
@@ -120,13 +107,14 @@
 
             AdController.show().then((result) => {
                 const reward = calculateReward();
-                const user = tg.initDataUnsafe?.user;
-
-                if (user && user.id) {
-                    notifyTelegramBot(user.id, reward);
-                }
-
+                
                 alert(`ধন্যবাদ! অ্যাড দেখা সম্পন্ন হয়েছে।\nআপনি ৳${reward.toFixed(2)} রিওয়ার্ড পেয়েছেন!`);
+                
+                // Telegram bot-e safe vabe reward pathanor jonno
+                try {
+                    tg.sendData(JSON.stringify({ action: "ad_reward", amount: reward }));
+                } catch(e) {}
+
                 tg.close();
             }).catch((result) => {
                 btn.disabled = false;
