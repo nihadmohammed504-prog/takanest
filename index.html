@@ -20,39 +20,118 @@
             height: 100vh;
             margin: 0;
             text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .card {
+            background-color: #1e293b;
+            padding: 30px 24px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            max-width: 350px;
+            width: 100%;
+        }
+        h2 {
+            margin-top: 0;
+            color: #38bdf8;
+        }
+        p {
+            color: #94a3b8;
+            font-size: 15px;
+            line-height: 1.5;
         }
         .btn {
             background: linear-gradient(135deg, #22c55e, #16a34a);
             color: white;
             border: none;
             padding: 14px 28px;
-            font-size: 18px;
+            font-size: 17px;
             font-weight: bold;
             border-radius: 12px;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
             margin-top: 20px;
+            width: 100%;
+            transition: 0.2s;
+        }
+        .btn:disabled {
+            background: #475569;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .status-msg {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #fbbf24;
         }
     </style>
 </head>
 <body>
-    <h2>🎁 TakaNest Reward</h2>
-    <p>ভিডিও অ্যাড সম্পূর্ণ দেখে রিওয়ার্ড ক্লেইম করুন।</p>
-    <button class="btn" id="ad-btn" onclick="showAd()">Watch Video Ad</button>
+    <div class="card">
+        <h2>🎁 TakaNest Reward</h2>
+        <p>ভিডিও অ্যাডটি সম্পূর্ণ দেখে আপনার ব্যালেন্সে রিওয়ার্ড যোগ করে নিন।</p>
+        
+        <button class="btn" id="ad-btn" onclick="showAd()">Watch Video Ad</button>
+        <div class="status-msg" id="status-msg"></div>
+    </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // Apnar Adsgram Block ID ekhane shothikbhabe boshano ache
+        const BOT_TOKEN = "8630869952:AAEabrUH3WfEw_coJA_x5sXCmtSwKjTvZiI";
         const AdController = window.Adsgram.init({ blockId: "49354" });
 
+        function calculateReward() {
+            let adCount = parseInt(localStorage.getItem("takanest_ad_count") || "0");
+            adCount += 1;
+            localStorage.setItem("takanest_ad_count", adCount);
+
+            if (adCount === 1) {
+                return 2.00;
+            } else if (adCount === 2) {
+                return 1.00;
+            } else if (adCount === 3) {
+                return 0.40;
+            } else {
+                // 0.08 theke 0.15 er moddhe random reward
+                const randomVal = Math.random() * (0.15 - 0.08) + 0.08;
+                return parseFloat(randomVal.toFixed(2));
+            }
+        }
+
+        async function notifyTelegramBot(userId, reward) {
+            const text = `🎉 <b>Congratulations!</b>\n\nঅ্যাড দেখার জন্য আপনার ব্যালেন্সে <b>৳${reward.toFixed(2)}</b> রিওয়ার্ড যুক্ত হয়েছে!`;
+            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${userId}&text=${encodeURIComponent(text)}&parse_mode=HTML`;
+            
+            try {
+                await fetch(url);
+            } catch (err) {
+                console.error("Bot notify error:", err);
+            }
+        }
+
         function showAd() {
+            const btn = document.getElementById("ad-btn");
+            const statusMsg = document.getElementById("status-msg");
+
+            btn.disabled = true;
+            statusMsg.innerText = "অ্যাড লোড হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...";
+
             AdController.show().then((result) => {
-                alert("ধন্যবাদ! অ্যাড দেখা সম্পন্ন হয়েছে।");
+                const reward = calculateReward();
+                const user = tg.initDataUnsafe?.user;
+
+                if (user && user.id) {
+                    notifyTelegramBot(user.id, reward);
+                }
+
+                alert(`ধন্যবাদ! অ্যাড দেখা সম্পন্ন হয়েছে।\nআপনি ৳${reward.toFixed(2)} রিওয়ার্ড পেয়েছেন!`);
                 tg.close();
             }).catch((result) => {
-                alert("অ্যাড পুরোপুরি দেখা হয়নি বা কোনো ত্রুটি হয়েছে।");
+                btn.disabled = false;
+                statusMsg.innerText = "";
+                alert("অ্যাড পুরোপুরি দেখা হয়নি বা কোনো কারণে লোড হতে পারেনি।");
             });
         }
     </script>
