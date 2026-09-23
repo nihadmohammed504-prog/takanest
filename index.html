@@ -1,11 +1,12 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TakaNest Ad Reward</title>
+    <!-- Telegram Mini App Library -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Adsgram SDK Library -->
     <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
     <style>
         body {
@@ -43,7 +44,8 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        const AdController = window.Adsgram.init({ blockId: "YOUR_BLOCK_ID_HERE" });
+        // Apnar Adsgram Block ID ekhane shothikbhabe boshano ache
+        const AdController = window.Adsgram.init({ blockId: "49354" });
 
         function showAd() {
             AdController.show().then((result) => {
