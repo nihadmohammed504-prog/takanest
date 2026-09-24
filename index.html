@@ -1,229 +1,274 @@
 <!DOCTYPE html>
-<html lang="bn">
-
+<html lang="en">
 <head>
-
     <meta charset="UTF-8">
 
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0">
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    >
 
     <title>TakaNest Ad Reward</title>
 
     <!-- Telegram Mini App -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-    <!-- Adsgram SDK -->
+    <!-- Adsgram -->
     <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
 
     <style>
-
         * {
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-
-            margin: 0;
-
-            min-height: 100vh;
-
-            padding: 20px;
-
-            display: flex;
-
-            justify-content: center;
-
-            align-items: center;
-
-            background: #0f172a;
-
-            color: white;
-
             font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #111827;
+            min-height: 100vh;
         }
 
-        .card {
-
+        .container {
             width: 100%;
+            max-width: 480px;
+            margin: auto;
+            padding: 20px;
+        }
 
-            max-width: 380px;
-
-            background: #1e293b;
-
-            padding: 30px 24px;
-
-            border-radius: 20px;
-
+        .header {
             text-align: center;
-
-            box-shadow:
-                0 10px 30px
-                rgba(0, 0, 0, 0.4);
+            padding: 25px 10px 20px;
         }
 
-        h2 {
-
-            margin-top: 0;
-
-            margin-bottom: 10px;
-
-            color: #38bdf8;
+        .logo {
+            width: 75px;
+            height: 75px;
+            margin: auto;
+            border-radius: 22px;
+            background: #229ed9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+            box-shadow: 0 8px 20px rgba(34, 158, 217, 0.25);
         }
 
-        .description {
-
-            color: #94a3b8;
-
-            font-size: 15px;
-
-            line-height: 1.6;
-
-            margin-bottom: 20px;
+        h1 {
+            margin-top: 15px;
+            font-size: 28px;
         }
 
-        .balance {
+        .subtitle {
+            margin-top: 6px;
+            color: #6b7280;
+            font-size: 14px;
+        }
 
-            background: #0f172a;
-
-            border-radius: 14px;
-
-            padding: 15px;
-
-            margin-bottom: 20px;
+        .balance-card {
+            background: white;
+            border-radius: 20px;
+            padding: 22px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+            margin-bottom: 18px;
         }
 
         .balance-title {
-
-            color: #94a3b8;
-
-            font-size: 13px;
-        }
-
-        .balance-amount {
-
-            margin-top: 5px;
-
-            font-size: 25px;
-
-            font-weight: bold;
-
-            color: #22c55e;
-        }
-
-        .btn {
-
-            width: 100%;
-
-            padding: 15px;
-
-            border: none;
-
-            border-radius: 12px;
-
-            background: linear-gradient(
-                135deg,
-                #22c55e,
-                #16a34a
-            );
-
-            color: white;
-
-            font-size: 17px;
-
-            font-weight: bold;
-
-            cursor: pointer;
-
-            box-shadow:
-                0 4px 15px
-                rgba(34, 197, 94, 0.35);
-
-            transition: 0.2s;
-        }
-
-        .btn:active {
-
-            transform: scale(0.98);
-        }
-
-        .btn:disabled {
-
-            background: #475569;
-
-            cursor: not-allowed;
-
-            box-shadow: none;
-        }
-
-        .status {
-
-            min-height: 22px;
-
-            margin-top: 15px;
-
-            color: #fbbf24;
-
             font-size: 14px;
+            color: #6b7280;
+        }
 
+        .balance {
+            font-size: 34px;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+
+        .reward-card {
+            background: white;
+            border-radius: 20px;
+            padding: 22px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .reward-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .reward-title {
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        .reward-description {
+            margin-top: 8px;
+            color: #6b7280;
+            font-size: 14px;
             line-height: 1.5;
         }
 
+        .watch-btn {
+            width: 100%;
+            border: none;
+            margin-top: 22px;
+            padding: 16px;
+            border-radius: 14px;
+            background: #229ed9;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .watch-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .status {
+            margin-top: 18px;
+            padding: 12px;
+            border-radius: 12px;
+            background: #f1f5f9;
+            color: #475569;
+            font-size: 14px;
+            text-align: center;
+            display: none;
+        }
+
+        .session-card {
+            background: white;
+            margin-top: 18px;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+            text-align: center;
+        }
+
+        .session-title {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .session-reward {
+            font-size: 26px;
+            font-weight: bold;
+            margin-top: 7px;
+        }
+
+        .info {
+            margin-top: 18px;
+            padding: 15px;
+            border-radius: 15px;
+            background: #eaf6fd;
+            color: #24556f;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 25px;
+            padding-bottom: 20px;
+            color: #9ca3af;
+            font-size: 12px;
+        }
     </style>
-
 </head>
-
 
 <body>
 
-<div class="card">
+<div class="container">
 
-    <h2>
-        🎁 TakaNest Reward
-    </h2>
+    <div class="header">
 
-    <div class="description">
+        <div class="logo">
+            TN
+        </div>
 
-        ভিডিও অ্যাডটি সম্পূর্ণ দেখুন এবং
-        আপনার রিওয়ার্ড সংগ্রহ করুন।
+        <h1>TakaNest</h1>
+
+        <div class="subtitle">
+            Watch Ads & Earn Rewards
+        </div>
 
     </div>
 
 
-    <div class="balance">
+    <div class="balance-card">
 
         <div class="balance-title">
-
-            এই Ad-এর Reward
-
+            Session Reward
         </div>
 
-        <div
-            class="balance-amount"
-            id="balance">
-
-            ৳0.00
-
+        <div class="balance">
+            ৳<span id="sessionBalance">0.00</span>
         </div>
 
     </div>
 
 
-    <button
-        class="btn"
-        id="ad-btn"
-        onclick="showAd()">
+    <div class="reward-card">
 
-        ▶ Watch Video Ad
+        <div class="reward-icon">
+            📺
+        </div>
 
-    </button>
+        <div class="reward-title">
+            Watch Advertisement
+        </div>
+
+        <div class="reward-description">
+            Watch the complete advertisement and receive your reward automatically.
+        </div>
+
+        <button
+            id="watchBtn"
+            class="watch-btn"
+            onclick="watchAd()"
+        >
+            ▶️ Watch Ad
+        </button>
+
+        <div
+            id="status"
+            class="status"
+        ></div>
+
+    </div>
 
 
-    <div
-        class="status"
-        id="status">
+    <div class="session-card">
 
+        <div class="session-title">
+            Reward from this session
+        </div>
+
+        <div class="session-reward">
+            ৳<span id="sessionReward">0.00</span>
+        </div>
+
+    </div>
+
+
+    <div class="info">
+        💡 <b>How it works</b><br><br>
+
+        1. Tap <b>Watch Ad</b><br>
+        2. Watch the advertisement completely<br>
+        3. After successful completion, your reward will be sent to TakaNest<br>
+        4. Your balance is updated by the bot
+    </div>
+
+
+    <div class="footer">
+        © 2026 TakaNest
     </div>
 
 </div>
@@ -232,230 +277,144 @@
 <script>
 
     // =====================================================
-    // TELEGRAM MINI APP
+    // TELEGRAM
     // =====================================================
 
     const tg = window.Telegram.WebApp;
 
     tg.ready();
-
     tg.expand();
 
 
     // =====================================================
     // ADSGRAM
+    // NEW BLOCK ID
     // =====================================================
 
-    let AdController = null;
-
-
-    try {
-
-        AdController = window.Adsgram.init({
-            blockId: "49354"
-        });
-
-        console.log(
-            "Adsgram initialized successfully."
-        );
-
-    } catch (error) {
-
-        console.error(
-            "Adsgram initialization error:",
-            error
-        );
-
-    }
+    const AdController = window.Adsgram
+        ? window.Adsgram.init({
+            blockId: "47024"
+        })
+        : null;
 
 
     // =====================================================
-    // SESSION DISPLAY
+    // ELEMENTS
+    // =====================================================
+
+    const watchBtn =
+        document.getElementById("watchBtn");
+
+    const statusBox =
+        document.getElementById("status");
+
+    const sessionRewardElement =
+        document.getElementById("sessionReward");
+
+    const sessionBalanceElement =
+        document.getElementById("sessionBalance");
+
+
+    // =====================================================
+    // SESSION REWARD
     // =====================================================
 
     let sessionReward = 0;
 
 
-    function updateBalance(amount) {
+    function updateSessionReward(amount) {
 
-        sessionReward += amount;
+        sessionReward += Number(amount);
 
-        document.getElementById(
-            "balance"
-        ).innerText =
-            "৳" + sessionReward.toFixed(2);
+        sessionReward =
+            Math.round(sessionReward * 100) / 100;
 
+        sessionRewardElement.textContent =
+            sessionReward.toFixed(2);
+
+        sessionBalanceElement.textContent =
+            sessionReward.toFixed(2);
     }
 
 
     // =====================================================
-    // CREATE UNIQUE EVENT ID
+    // STATUS
+    // =====================================================
+
+    function showStatus(message) {
+
+        statusBox.style.display = "block";
+
+        statusBox.textContent = message;
+    }
+
+
+    function hideStatus() {
+
+        statusBox.style.display = "none";
+
+        statusBox.textContent = "";
+    }
+
+
+    // =====================================================
+    // EVENT ID
     // =====================================================
 
     function createEventId() {
 
-        try {
-
-            if (
-                window.crypto &&
-                typeof crypto.randomUUID === "function"
-            ) {
-
-                return crypto.randomUUID();
-
-            }
-
-        } catch (error) {
-
-            console.log(
-                "UUID unavailable"
-            );
-
+        if (
+            window.crypto &&
+            typeof window.crypto.randomUUID === "function"
+        ) {
+            return window.crypto.randomUUID();
         }
-
 
         return (
             Date.now().toString(36) +
             "-" +
             Math.random()
                 .toString(36)
-                .substring(2) +
-            "-" +
-            Math.random()
-                .toString(36)
-                .substring(2)
+                .substring(2, 12)
         );
-
     }
 
 
     // =====================================================
-    // SEND REWARD EVENT TO BOT
+    // WATCH AD
     // =====================================================
 
-    function sendRewardEvent() {
-
-        try {
-
-            /*
-             * IMPORTANT:
-             *
-             * এখানে reward amount পাঠানো হচ্ছে না।
-             *
-             * শুধু একটি event পাঠানো হচ্ছে।
-             *
-             * Bot server নিজে reward amount calculate করবে।
-             */
-
-            const data = {
-
-                action: "ad_reward",
-
-                event_id: createEventId(),
-
-                timestamp: Date.now()
-
-            };
-
-
-            console.log(
-                "Sending reward event:",
-                data
-            );
-
-
-            tg.sendData(
-                JSON.stringify(data)
-            );
-
-
-        } catch (error) {
-
-            console.error(
-                "Telegram sendData error:",
-                error
-            );
-
-
-            const status =
-                document.getElementById(
-                    "status"
-                );
-
-
-            status.innerText =
-                "❌ Reward পাঠানো যায়নি। আবার চেষ্টা করুন।";
-
-        }
-
-    }
-
-
-    // =====================================================
-    // SHOW ADSGRAM REWARDED AD
-    // =====================================================
-
-    async function showAd() {
-
-        const button =
-            document.getElementById(
-                "ad-btn"
-            );
-
-
-        const status =
-            document.getElementById(
-                "status"
-            );
-
-
-        // -------------------------------------------------
-        // Check Adsgram
-        // -------------------------------------------------
+    async function watchAd() {
 
         if (!AdController) {
 
-            status.innerText =
-                "❌ Ads system লোড হয়নি।";
+            showStatus(
+                "❌ Adsgram could not be loaded. Please try again."
+            );
 
             return;
-
         }
 
 
-        // -------------------------------------------------
-        // Prevent double click
-        // -------------------------------------------------
+        watchBtn.disabled = true;
 
-        button.disabled = true;
-
-        button.innerText =
+        watchBtn.textContent =
             "⏳ Loading Ad...";
 
-
-        status.innerText =
-            "অ্যাড লোড হচ্ছে, অপেক্ষা করুন...";
+        showStatus(
+            "📺 Advertisement is loading..."
+        );
 
 
         try {
-
-            // -------------------------------------------------
-            // SHOW AD
-            // -------------------------------------------------
 
             const result =
                 await AdController.show();
 
 
-            console.log(
-                "Adsgram result:",
-                result
-            );
-
-
-            // -------------------------------------------------
-            // ONLY AFTER COMPLETION
-            // -------------------------------------------------
+            // =============================================
+            // AD COMPLETED
+            // =============================================
 
             if (
                 result &&
@@ -463,33 +422,71 @@
                 result.error !== true
             ) {
 
-
-                status.innerText =
-                    "✅ Ad সম্পূর্ণ হয়েছে!\nReward processing...";
+                showStatus(
+                    "✅ Ad completed! Processing reward..."
+                );
 
 
                 /*
-                 * Bot-এ reward event পাঠানো হচ্ছে।
+                 * IMPORTANT:
                  *
-                 * sendData() Telegram Mini App বন্ধ করে
-                 * bot-এ web_app_data পাঠাবে।
+                 * Client does NOT decide the reward amount.
+                 *
+                 * Bot calculates the reward server-side.
                  */
 
-                sendRewardEvent();
+                const data = {
+
+                    action: "ad_reward",
+
+                    event_id: createEventId(),
+
+                    timestamp: Date.now()
+
+                };
 
 
-            } else {
+                /*
+                 * sendData() sends the data to the Telegram bot.
+                 *
+                 * This works because the Mini App is opened
+                 * from Telegram's Web App keyboard button.
+                 */
 
+                if (
+                    typeof tg.sendData === "function"
+                ) {
 
-                status.innerText =
-                    "⚠️ Ad সম্পূর্ণ হয়নি। Reward দেওয়া হয়নি।";
+                    tg.sendData(
+                        JSON.stringify(data)
+                    );
 
+                } else {
 
-                button.disabled = false;
+                    showStatus(
+                        "❌ Telegram Web App connection unavailable."
+                    );
 
-                button.innerText =
-                    "▶ Watch Video Ad";
+                    watchBtn.disabled = false;
 
+                    watchBtn.textContent =
+                        "▶️ Watch Ad";
+
+                    return;
+                }
+
+            }
+
+            else {
+
+                showStatus(
+                    "⚠️ Ad was not completed. No reward."
+                );
+
+                watchBtn.disabled = false;
+
+                watchBtn.textContent =
+                    "▶️ Watch Ad";
             }
 
 
@@ -501,21 +498,42 @@
             );
 
 
-            status.innerText =
-                "❌ Ad চালু করা যায়নি। আবার চেষ্টা করুন।";
+            showStatus(
+                "❌ Ad could not be completed. Please try again."
+            );
 
+            watchBtn.disabled = false;
 
-            button.disabled = false;
-
-            button.innerText =
-                "▶ Watch Video Ad";
-
+            watchBtn.textContent =
+                "▶️ Watch Ad";
         }
 
+    }
+
+
+    // =====================================================
+    // TELEGRAM THEME
+    // =====================================================
+
+    if (tg.themeParams) {
+
+        const root =
+            document.documentElement;
+
+        if (tg.themeParams.bg_color) {
+
+            document.body.style.background =
+                tg.themeParams.bg_color;
+        }
+
+        if (tg.themeParams.text_color) {
+
+            document.body.style.color =
+                tg.themeParams.text_color;
+        }
     }
 
 </script>
 
 </body>
-
 </html>
