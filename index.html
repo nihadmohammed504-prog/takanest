@@ -1,127 +1,521 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
     <title>TakaNest Ad Reward</title>
-    <!-- Telegram Mini App Library -->
+
+    <!-- Telegram Mini App -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <!-- Adsgram SDK Library -->
+
+    <!-- Adsgram SDK -->
     <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
+
     <style>
-        body {
-            background-color: #0f172a;
-            color: #ffffff;
-            font-family: sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            text-align: center;
-            padding: 20px;
+
+        * {
             box-sizing: border-box;
         }
-        .card {
-            background-color: #1e293b;
-            padding: 30px 24px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-            max-width: 350px;
-            width: 100%;
+
+        body {
+
+            margin: 0;
+
+            min-height: 100vh;
+
+            padding: 20px;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            background: #0f172a;
+
+            color: white;
+
+            font-family: Arial, sans-serif;
         }
+
+        .card {
+
+            width: 100%;
+
+            max-width: 380px;
+
+            background: #1e293b;
+
+            padding: 30px 24px;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            box-shadow:
+                0 10px 30px
+                rgba(0, 0, 0, 0.4);
+        }
+
         h2 {
+
             margin-top: 0;
+
+            margin-bottom: 10px;
+
             color: #38bdf8;
         }
-        p {
+
+        .description {
+
             color: #94a3b8;
+
             font-size: 15px;
-            line-height: 1.5;
+
+            line-height: 1.6;
+
+            margin-bottom: 20px;
         }
-        .btn {
-            background: linear-gradient(135deg, #22c55e, #16a34a);
-            color: white;
-            border: none;
-            padding: 14px 28px;
-            font-size: 17px;
+
+        .balance {
+
+            background: #0f172a;
+
+            border-radius: 14px;
+
+            padding: 15px;
+
+            margin-bottom: 20px;
+        }
+
+        .balance-title {
+
+            color: #94a3b8;
+
+            font-size: 13px;
+        }
+
+        .balance-amount {
+
+            margin-top: 5px;
+
+            font-size: 25px;
+
             font-weight: bold;
-            border-radius: 12px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
-            margin-top: 20px;
+
+            color: #22c55e;
+        }
+
+        .btn {
+
             width: 100%;
+
+            padding: 15px;
+
+            border: none;
+
+            border-radius: 12px;
+
+            background: linear-gradient(
+                135deg,
+                #22c55e,
+                #16a34a
+            );
+
+            color: white;
+
+            font-size: 17px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 4px 15px
+                rgba(34, 197, 94, 0.35);
+
             transition: 0.2s;
         }
+
+        .btn:active {
+
+            transform: scale(0.98);
+        }
+
         .btn:disabled {
+
             background: #475569;
+
             cursor: not-allowed;
+
             box-shadow: none;
         }
-        .status-msg {
+
+        .status {
+
+            min-height: 22px;
+
             margin-top: 15px;
-            font-size: 14px;
+
             color: #fbbf24;
+
+            font-size: 14px;
+
+            line-height: 1.5;
         }
+
     </style>
+
 </head>
+
+
 <body>
-    <div class="card">
-        <h2>🎁 TakaNest Reward</h2>
-        <p>ভিডিও অ্যাডটি সম্পূর্ণ দেখে আপনার ব্যালেন্সে রিওয়ার্ড যোগ করে নিন।</p>
-        
-        <button class="btn" id="ad-btn" onclick="showAd()">Watch Video Ad</button>
-        <div class="status-msg" id="status-msg"></div>
+
+<div class="card">
+
+    <h2>
+        🎁 TakaNest Reward
+    </h2>
+
+    <div class="description">
+
+        ভিডিও অ্যাডটি সম্পূর্ণ দেখুন এবং
+        আপনার রিওয়ার্ড সংগ্রহ করুন।
+
     </div>
 
-    <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand();
 
-        const AdController = window.Adsgram.init({ blockId: "49354" });
+    <div class="balance">
 
-        function calculateReward() {
-            let adCount = parseInt(localStorage.getItem("takanest_ad_count") || "0");
-            adCount += 1;
-            localStorage.setItem("takanest_ad_count", adCount);
+        <div class="balance-title">
 
-            if (adCount === 1) {
-                return 2.00;
-            } else if (adCount === 2) {
-                return 1.00;
-            } else if (adCount === 3) {
-                return 0.40;
-            } else {
-                const randomVal = Math.random() * (0.15 - 0.08) + 0.08;
-                return parseFloat(randomVal.toFixed(2));
+            এই Ad-এর Reward
+
+        </div>
+
+        <div
+            class="balance-amount"
+            id="balance">
+
+            ৳0.00
+
+        </div>
+
+    </div>
+
+
+    <button
+        class="btn"
+        id="ad-btn"
+        onclick="showAd()">
+
+        ▶ Watch Video Ad
+
+    </button>
+
+
+    <div
+        class="status"
+        id="status">
+
+    </div>
+
+</div>
+
+
+<script>
+
+    // =====================================================
+    // TELEGRAM MINI APP
+    // =====================================================
+
+    const tg = window.Telegram.WebApp;
+
+    tg.ready();
+
+    tg.expand();
+
+
+    // =====================================================
+    // ADSGRAM
+    // =====================================================
+
+    let AdController = null;
+
+
+    try {
+
+        AdController = window.Adsgram.init({
+            blockId: "49354"
+        });
+
+        console.log(
+            "Adsgram initialized successfully."
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Adsgram initialization error:",
+            error
+        );
+
+    }
+
+
+    // =====================================================
+    // SESSION DISPLAY
+    // =====================================================
+
+    let sessionReward = 0;
+
+
+    function updateBalance(amount) {
+
+        sessionReward += amount;
+
+        document.getElementById(
+            "balance"
+        ).innerText =
+            "৳" + sessionReward.toFixed(2);
+
+    }
+
+
+    // =====================================================
+    // CREATE UNIQUE EVENT ID
+    // =====================================================
+
+    function createEventId() {
+
+        try {
+
+            if (
+                window.crypto &&
+                typeof crypto.randomUUID === "function"
+            ) {
+
+                return crypto.randomUUID();
+
             }
+
+        } catch (error) {
+
+            console.log(
+                "UUID unavailable"
+            );
+
         }
 
-        function showAd() {
-            const btn = document.getElementById("ad-btn");
-            const statusMsg = document.getElementById("status-msg");
 
-            btn.disabled = true;
-            statusMsg.innerText = "অ্যাড লোড হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...";
+        return (
+            Date.now().toString(36) +
+            "-" +
+            Math.random()
+                .toString(36)
+                .substring(2) +
+            "-" +
+            Math.random()
+                .toString(36)
+                .substring(2)
+        );
 
-            AdController.show().then((result) => {
-                const reward = calculateReward();
-                
-                alert(`ধন্যবাদ! অ্যাড দেখা সম্পন্ন হয়েছে।\nআপনি ৳${reward.toFixed(2)} রিওয়ার্ড পেয়েছেন!`);
-                
-                // Telegram bot-e safe vabe reward pathanor jonno
-                try {
-                    tg.sendData(JSON.stringify({ action: "ad_reward", amount: reward }));
-                } catch(e) {}
+    }
 
-                tg.close();
-            }).catch((result) => {
-                btn.disabled = false;
-                statusMsg.innerText = "";
-                alert("অ্যাড পুরোপুরি দেখা হয়নি বা কোনো কারণে লোড হতে পারেনি।");
-            });
+
+    // =====================================================
+    // SEND REWARD EVENT TO BOT
+    // =====================================================
+
+    function sendRewardEvent() {
+
+        try {
+
+            /*
+             * IMPORTANT:
+             *
+             * এখানে reward amount পাঠানো হচ্ছে না।
+             *
+             * শুধু একটি event পাঠানো হচ্ছে।
+             *
+             * Bot server নিজে reward amount calculate করবে।
+             */
+
+            const data = {
+
+                action: "ad_reward",
+
+                event_id: createEventId(),
+
+                timestamp: Date.now()
+
+            };
+
+
+            console.log(
+                "Sending reward event:",
+                data
+            );
+
+
+            tg.sendData(
+                JSON.stringify(data)
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Telegram sendData error:",
+                error
+            );
+
+
+            const status =
+                document.getElementById(
+                    "status"
+                );
+
+
+            status.innerText =
+                "❌ Reward পাঠানো যায়নি। আবার চেষ্টা করুন।";
+
         }
-    </script>
+
+    }
+
+
+    // =====================================================
+    // SHOW ADSGRAM REWARDED AD
+    // =====================================================
+
+    async function showAd() {
+
+        const button =
+            document.getElementById(
+                "ad-btn"
+            );
+
+
+        const status =
+            document.getElementById(
+                "status"
+            );
+
+
+        // -------------------------------------------------
+        // Check Adsgram
+        // -------------------------------------------------
+
+        if (!AdController) {
+
+            status.innerText =
+                "❌ Ads system লোড হয়নি।";
+
+            return;
+
+        }
+
+
+        // -------------------------------------------------
+        // Prevent double click
+        // -------------------------------------------------
+
+        button.disabled = true;
+
+        button.innerText =
+            "⏳ Loading Ad...";
+
+
+        status.innerText =
+            "অ্যাড লোড হচ্ছে, অপেক্ষা করুন...";
+
+
+        try {
+
+            // -------------------------------------------------
+            // SHOW AD
+            // -------------------------------------------------
+
+            const result =
+                await AdController.show();
+
+
+            console.log(
+                "Adsgram result:",
+                result
+            );
+
+
+            // -------------------------------------------------
+            // ONLY AFTER COMPLETION
+            // -------------------------------------------------
+
+            if (
+                result &&
+                result.done === true &&
+                result.error !== true
+            ) {
+
+
+                status.innerText =
+                    "✅ Ad সম্পূর্ণ হয়েছে!\nReward processing...";
+
+
+                /*
+                 * Bot-এ reward event পাঠানো হচ্ছে।
+                 *
+                 * sendData() Telegram Mini App বন্ধ করে
+                 * bot-এ web_app_data পাঠাবে।
+                 */
+
+                sendRewardEvent();
+
+
+            } else {
+
+
+                status.innerText =
+                    "⚠️ Ad সম্পূর্ণ হয়নি। Reward দেওয়া হয়নি।";
+
+
+                button.disabled = false;
+
+                button.innerText =
+                    "▶ Watch Video Ad";
+
+            }
+
+
+        } catch (error) {
+
+            console.error(
+                "Adsgram error:",
+                error
+            );
+
+
+            status.innerText =
+                "❌ Ad চালু করা যায়নি। আবার চেষ্টা করুন।";
+
+
+            button.disabled = false;
+
+            button.innerText =
+                "▶ Watch Video Ad";
+
+        }
+
+    }
+
+</script>
+
 </body>
+
 </html>
